@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Stress - Wedding Guest Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #222; }
+        
+        /* Top & Bottom Navigation Bars */
+        .navbar, .footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: #ffffff; }
+        .brand { font-family: 'Brush Script MT', cursive, serif; font-size: 32px; font-style: italic; color: #111; }
+        .nav-links { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; font-size: 14px; }
+        .nav-btn { background: none; border: none; font-size: 14px; cursor: pointer; color: #333; padding: 6px 12px; border-radius: 4px; }
+        .nav-btn.active { background: #222; color: #fff; font-weight: bold; }
+
+        /* Main Sage-Green Canvas */
+        .main-canvas { background-color: #d8dcd3; padding: 40px 20px; min-height: 650px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .hidden { display: none; }
+
+        /* Guest RSVP Page Styles */
+        .guest-header { text-align: center; margin-bottom: 25px; }
+        .guest-header p { margin: 0; font-size: 16px; }
+        .guest-header h1 { margin: 5px 0 20px 0; font-size: 32px; }
+        .hero-img { width: 100%; max-width: 550px; height: 220px; object-fit: cover; border: 1px solid #888; display: block; margin: 0 auto 30px auto; }
+
+        .form-container { max-width: 480px; margin: 0 auto; }
+        .form-title { text-align: center; font-size: 22px; margin-bottom: 20px; }
+        .row { display: flex; gap: 15px; }
+        .row .form-group { flex: 1; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; background: #fff; }
+        .error-text { color: #b91c1c; font-size: 12px; margin-top: 4px; display: none; }
+        .success-banner { background: #dcfce7; color: #166534; padding: 10px; border-radius: 4px; text-align: center; margin-top: 15px; font-size: 14px; display: none; }
+        .btn-dark { background-color: #2b2b2b; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 15px; cursor: pointer; margin-top: 5px; }
+        .btn-dark:hover { background-color: #111; }
+
+        /* Host Dashboard Page Styles */
+        .dash-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 30px; }
+        .dash-actions { display: flex; align-items: stretch; gap: 20px; margin-top: 15px; width: 100%; }
+        .stat-box { background: #c5c9c0; padding: 15px; border-radius: 4px; font-size: 14px; line-height: 1; flex: 0.6; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .export-box { background: #c5c9c0; padding: 15px 20px; border-radius: 4px; text-align: center; flex: 1; }
+        
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; background: #e2e5de; font-size: 13px; }
+        th, td { border: 1px solid #777; padding: 10px; text-align: center; }
+        th { background-color: #cfd3ca; font-weight: bold; }
+        .footer { border-top: 1px solid #eee; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+
+    <!-- Brand Heading-->
+    <div class="navbar">
+        <div class="brand">Guest Stress</div>
+        <div class="nav-links">
+            <button id="btnGuestView" class="nav-btn" onclick="showRole('guestScreen')">Home</button> 
+            <button id="btnHostView" class="nav-btn" onclick="showRole('hostScreen')">Member: Dod</button>
+        </div>
+    </div>
+
+    <!-- Main Area -->
+    <div class="main-canvas">
+        <div class="container">
+
+            <!-- GUEST RSVP FORM -->
+            <div id="guestScreen">
+                <div class="guest-header">
+                    <p>For the Wedding of</p>
+                    <h1>Dod and Dottie</h1>
+                    <img class="hero-img" src="https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D" alt="Dod and Dottie Wedding">
+                </div>
+
+                <div class="form-container">
+                    <h2 class="form-title">Guest RSVP</h2>
+                    <div class="row">
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" id="firstName" placeholder="Jane">
+                            <div id="errFirst" class="error-text">Cannot Leave Field Empty</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" id="lastName" placeholder="Smitherton">
+                            <div id="errLast" class="error-text">Cannot Leave Field Empty</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>RSVP Status</label>
+                        <select id="rsvpStatus">
+                            <option value="">Select an option...</option>
+                            <option value="Attending">Attending</option>
+                            <option value="Not Attending">Not Attending</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                        <div id="errStatus" class="error-text">Cannot Leave Field Empty</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="phone" placeholder="+61 412 345 678">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email address</label>
+                        <input type="email" id="email" placeholder="email@janesfakedomain.net">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dietary Requirements</label>
+                        <textarea id="dietary" rows="3" placeholder="Vegetarian, Gluten-Free, Allergies or None"></textarea>
+                    </div>
+
+                    <button class="btn-dark" onclick="submitRSVP()">Submit</button>
+                    <div id="successBox" class="success-banner">RSVP Submitted! Click "Host Dashboard" in the top bar to view your entry.</div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <!-- HOST DASHBOARD -->
+            <div id="hostScreen" style="margin-top: 60px; padding-top: 40px; border-top: 2px solid #999;">
+                <div class="host-dashboard">
+                    <div style="width: 100%;">
+                        <h1 style="margin:0;">For Dod and Dottie</h1>
+                        <p style="margin:5px 0 15px 0; font-size:14px;">The Dashboard to view, create and edit guest.</p>
+                        <div class="dash-actions">
+                            <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px; flex: 1;">
+                                <button class="btn-dark" style="margin-top: 0; padding: 12px;" onclick="alert('Guest Link Copied')">Click to Copy Guest RSVP Link</button>
+                                <button class="btn-dark" style="margin-top: 0; padding: 12px;" onclick="document.getElementById('firstName').focus()">Add to Guest List</button>
+                            </div>
+                            <div class="stat-box" id="guestStats">
+                                <strong>Guest Count:</strong><br>
+                                    Attending: <span id="countAttending">2</span><br>
+                                    Not Attending: <span id="countDeclined">1</span><br>
+                                    Pending: <span id="countPending">0</span>
+                            </div>
+                            <div class="export-box">
+                                <h3>Export Data</h3>
+                                <button class="btn-dark" style="margin-bottom:8px;" onclick="alert('Exporting Guest List to PDF...')">Export to PDF File</button>
+                                <button class="btn-dark" onclick="alert('Exporting Guest List to CSV...')">Export to CSV File</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Guest list</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>RSVP Status</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Dietary Requirements</th>
+                            <th>Table No.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guestTableBody">
+                        <tr>
+                            <td>Joe</td>
+                            <td>Digger</td>
+                            <td>Attending</td>
+                            <td>0468 640 321</td>
+                            <td>digdig@gmail.com</td>
+                            <td>Allergic to Apples</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>Hazelnut</td>
+                            <td>Spread</td>
+                            <td>Attending</td>
+                            <td>0433 882 321</td>
+                            <td>CDough@yahoo.com</td>
+                            <td>Allergic to Pears</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Bob</td>
+                            <td>Jerrister</td>
+                            <td>Not Attending</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+        <div class="navbar">
+        <div class="brand">Guest Stress</div>
+        <div class="nav-links">
+            <button id="btnGuestView" class="nav-btn" onclick="showRole('guestScreen')">Home</button> 
+            <button id="btnHostView" class="nav-btn">Contact Us</button>
+            <button id="btnHostView" class="nav-btn">FAQ</button>
+            <button id="btnHostView" class="nav-btn">About Us</button>
+        </div>
+    </div>
+</footer>
+</html>
+
+
