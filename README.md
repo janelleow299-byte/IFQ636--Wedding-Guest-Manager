@@ -1,7 +1,7 @@
 # IFQ636--Wedding-Guest-Manager
 
 ## Live Deployment URL 
-- **AWS EC2 Public URL:** http://3.25.116.250
+- **AWS EC2 Public URL:** [3.25.116.250](http://3.107.198.58/)
 
 ## Setup and Local Execution
 1. Clone the repository: `git clone https://github.com`
