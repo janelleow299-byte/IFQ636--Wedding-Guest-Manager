@@ -18,3 +18,4 @@
 - **Mock Dashboard Controls:** The PDF/CSV export buttons are mocked UI elements aligned with the Figma prototype
 - **Unimplemented Row Editing:** The edit button, which allows the host to manually modify guest information in the guest list, is not included because the table displays static sample data without backend persistence.
 - **Guest Capacity:** The web application is designed for a small capacity of 150 maximum of people, and therefore automated blocking of submissions will be implemented
+- **Guest Filtering:** The web application does not have a filtering element currently working or on the layout. 
